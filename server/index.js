@@ -7,19 +7,19 @@ const app = express();
 const jose = require('jose')
 //Schema
 const User = require('./Schema/User');
-const { log } = require("console");
+const Empl = require('./Schema/Employee')
 
-// //-------- image upload
-// const multer = require("multer");
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, "./public/images");
-//     },
-//     filename: function (req, file, cb) {
-//         cb(null, Date.now() + "_" + file.originalname);
-//     },
-// });
-// const upload = multer({ storage: storage });
+//-------- image upload
+const multer = require("multer");
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "./public/images");
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + "_" + file.originalname);
+    },
+});
+const upload = multer({ storage: storage });
 
 //header origin
 app.use((req, res, next) => {
@@ -151,7 +151,34 @@ app.get("/dashbord", isAuthenticated, (req, res) => {
     res.sendStatus(200);
 });
 
-
+//============================= Employee ================================
+app.post("/dashboard/employee/addemployee/registeruser", upload.single("file"), (req, res) => {
+    Empl.findOne({ username: req.body.username, email: req.body.email }).then(result => {
+        if (result !== null) {
+            res.sendStatus(401)
+            console.log("Username or Email already exist");
+        } else {
+            User.findOne({ username: req.body.createdBy }).then(result => {
+                try {
+                    const createdBy = result._id;
+                    Empl.insertMany({
+                        contact: req.body.contact,
+                        email: req.body.email,
+                        username: req.body.username,
+                        address: req.body.address,
+                        education: req.body.education,
+                        image: req.body.file,
+                        createdby: createdBy,
+                    });
+                    res.sendStatus(200);
+                } catch (error) {
+                    res.sendStatus(401);
+                    console.log(error);
+                }
+            })
+        }
+    })
+})
 
 
 
