@@ -17,6 +17,11 @@ const Home = React.lazy(() => import('./views/pages/home/Home'))
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
+const AddEmployee = React.lazy(() => import('./views/pages/empl/Addempl'))
+const EditEmployee = React.lazy(() => import('./views/pages/empl/Editempl'))
+const ViewEmployee = React.lazy(() => import('./views/pages/empl/Viewempl'))
+
+
 const Login = React.lazy(() => import('./views/pages/login/Login'))
 const Register = React.lazy(() => import('./views/pages/register/Register'))
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
@@ -29,12 +34,16 @@ class App extends Component {
       <BrowserRouter>
         <Suspense fallback={loading}>
           <Routes>
-          <Route path="/" name="Home" element={<Home />} />
-          
-          <Route path="/dashboard" name="Home" element={<Dashboard />} />
+            <Route path="/" name="Home" element={<Home />} />
+
+            <Route path="/dashboard" name="Home" element={<Dashboard />} />
 
             <Route exact path="/login" name="Login Page" element={<Login />} />
             <Route exact path="/register" name="Register Page" element={<Register />} />
+
+            <Route exact path="/dashboard/employee/addemployee" name="Add Employee" element={<AddEmployee />} />
+            <Route exact path="/dashboard/employee/editemployee" name="Edit Employee" element={<EditEmployee />} />
+            <Route exact path="/dashboard/employee/viewemployee" name="View Employee" element={<ViewEmployee />} />
 
             <Route path="/*" name="Page 404" element={<Page404 />} />
             <Route path="/500" name="Page 500" element={<Page500 />} />
