@@ -87,7 +87,7 @@ const Addempl = () => {
             .then(
                 (response) => {
                     console.log(response);
-                    //window.location = "/dashboard/employee";
+                    window.location = "/dashboard/employee";
                 },
                 (error) => {
                     console.log(error);

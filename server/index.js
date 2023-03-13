@@ -180,8 +180,61 @@ app.post("/dashboard/employee/addemployee/registeruser", upload.single("file"), 
     })
 })
 
+app.get('/dashboard/viewemployee/showuser', (req, res) => {
+    Empl.aggregate([
+        {
+            $lookup: {
+                from: "users",
+                localField: "createdby",
+                foreignField: "_id",
+                as: "result",
+            },
+        },
+    ])
+        .then((result) => {
+            res.send(result);
+            console.log(result);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+})
 
-
+app.post('/dashboard/employee/addemployee/edituser', (req, res) => {
+    // Empl.findByIdAndUpdate(
+    //     { _id: req.body.id },
+    //     {
+    //         contact: req.body.contact,
+    //         email: req.body.email,
+    //         username: req.body.username,
+    //         education: req.body.education,
+    //         address: req.body.address,
+    //         file: req.body.file,
+    //     },
+    //     (err, succ) => {
+    //         if (err) {
+    //             res.sendStatus(401);
+    //             console.log(err);
+    //         } else {
+    //             res.sendStatus(200);
+    //         }
+    //     }
+    // );
+    Empl.findByIdAndUpdate({ _id: req.body.id },
+        {
+            contact: req.body.contact,
+            email: req.body.email,
+            username: req.body.username,
+            education: req.body.education,
+            address: req.body.address,
+            file: req.body.file,
+        }).then(result => {
+            res.sendStatus(200)
+        }).catch(err => {
+            res.sendStatus(401);
+            console.log(err);
+        })
+})
 
 const port = 5000;
 app.listen(port, () => {

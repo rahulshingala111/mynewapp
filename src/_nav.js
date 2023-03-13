@@ -46,11 +46,11 @@ const _nav = [
         name: 'Create New',
         to: '/dashboard/employee/addemployee',
       },
-      {
-        component: CNavItem,
-        name: 'Edit',
-        to: '/dashboard/employee/editemployee',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Edit',
+      //   to: '/dashboard/employee/editemployee',
+      // },
       // {
       //   component: CNavItem,
       //   name: 'Error 404',
