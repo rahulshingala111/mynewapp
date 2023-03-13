@@ -5,6 +5,9 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const app = express();
 
+//Schema
+
+
 // //-------- image upload
 // const multer = require("multer");
 // const storage = multer.diskStorage({
@@ -45,6 +48,19 @@ db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
     console.log("Database connected");
 });
+
+// HOME ----------------------------------------------------------
+app.get('/hello',(req,res)=>{
+   res.sendStatus(200);
+    console.log('welcome');
+})
+
+
+
+
+
+
+
 
 const port = 5000;
 app.listen(port, () => {
