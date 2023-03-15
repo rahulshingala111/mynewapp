@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react'
@@ -15,11 +15,21 @@ import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
 import navigation from '../_nav'
+import navigationAdmin from '../_navAdmin'
 
 const AppSidebar = (data) => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
+
+  // console.log(data.data)
+  // const [newData, setNewData] = useState()
+  // if (data.data === 'employee') {
+  //   console.log('yesssss')
+  // } else {
+  //   console.log('nooo')
+  // }
+
   return (
     <CSidebar
       position="fixed"
@@ -35,7 +45,11 @@ const AppSidebar = (data) => {
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={navigation} data={data}/>
+          {data.data === 'admin' ? (
+            <AppSidebarNav items={navigationAdmin} />
+          ) : (
+            <AppSidebarNav items={navigation} />
+          )}
         </SimpleBar>
       </CSidebarNav>
       <CSidebarToggler

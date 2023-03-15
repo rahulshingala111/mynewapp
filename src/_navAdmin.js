@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react'
 import CIcon from '@coreui/icons-react'
-import { cilWindowMaximize } from '@coreui/icons'
+import { cilUser } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 const _nav = [
   // {
@@ -30,19 +30,34 @@ const _nav = [
   },
   {
     component: CNavGroup,
-    name: 'Project',
-    icon: <CIcon icon={cilWindowMaximize} customClassName="nav-icon" />,
+    name: 'Employee',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
         name: 'View',
-        to: '/dashboard/project/viewproject',
+        to: '/dashboard/employee/viewemployee',
       },
       {
         component: CNavItem,
-        name: 'Add',
-        to: '/dashboard/project/addproject',
+        name: 'Create New',
+        to: '/dashboard/employee/addemployee',
       },
+      // {
+      //   component: CNavItem,
+      //   name: 'Edit',
+      //   to: '/dashboard/employee/editemployee',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Error 404',
+      //   to: '/404',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Error 500',
+      //   to: '/500',
+      // },
     ],
   },
 ]

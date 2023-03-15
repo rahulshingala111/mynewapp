@@ -136,6 +136,8 @@ app.post('/login', checkPassword2, checkUsername2, async (req, res) => {
   res.sendStatus(200)
 })
 
+//#endregion
+
 //#region ============================= Dasboard ================================
 
 const isAuthenticated = async (req, res, next) => {
@@ -164,7 +166,6 @@ const isAuthenticated = async (req, res, next) => {
 }
 
 app.get('/dashboard', isAuthenticated, (req, res) => {
-  console.log('In Login Post')
 })
 
 //#endregion

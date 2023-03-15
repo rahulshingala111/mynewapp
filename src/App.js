@@ -21,6 +21,8 @@ const AddEmployee = React.lazy(() => import('./views/pages/empl/Addempl'))
 const EditEmployee = React.lazy(() => import('./views/pages/empl/Editempl'))
 const ViewEmployee = React.lazy(() => import('./views/pages/empl/Viewempl'))
 
+const ViewProject = React.lazy(() => import('./views/pages/project/ViewProject'))
+const AddProject = React.lazy(() => import('./views/pages/project/AddProject'))
 
 const Login = React.lazy(() => import('./views/pages/login/Login'))
 const Register = React.lazy(() => import('./views/pages/register/Register'))
@@ -44,6 +46,9 @@ class App extends Component {
             <Route exact path="/dashboard/employee/addemployee" name="Add Employee" element={<AddEmployee />} />
             <Route exact path="/dashboard/employee/editemployee" name="Edit Employee" element={<EditEmployee />} />
             <Route exact path="/dashboard/employee/viewemployee" name="View Employee" element={<ViewEmployee />} />
+
+            <Route exact path="/dashboard/project/viewproject" name="View Project" element={<ViewProject />} />
+            <Route exact path="/dashboard/project/addproject" name="Add Project" element={<AddProject />} />
 
             <Route path="/*" name="Page 404" element={<Page404 />} />
             <Route path="/500" name="Page 500" element={<Page500 />} />
