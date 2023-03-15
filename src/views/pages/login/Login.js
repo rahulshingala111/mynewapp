@@ -16,58 +16,53 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import axios from "axios";
+import axios from 'axios'
 // import jwt from "jsonwebtoken";
 import * as jose from 'jose'
-import { useCookies } from "react-cookie";
+import { useCookies } from 'react-cookie'
 
 const Login = () => {
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [cookies, setCookie] = useCookies(["user"]);
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [cookies, setCookie] = useCookies(['user'])
   const [tooken, setToken] = useState()
 
   const handleUserName = (e) => {
-    console.log(e.target.value);
-    setUsername(e.target.value);
-  };
+    console.log(e.target.value)
+    setUsername(e.target.value)
+  }
   const handlePassword = (e) => {
-    console.log(e.target.value);
-    setPassword(e.target.value);
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const secret = new TextEncoder().encode('cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',)
-    const alg = 'HS256'
-    const jwt = new jose.SignJWT({ username, password })
-      .setProtectedHeader({ alg })
+    console.log(e.target.value)
+    setPassword(e.target.value)
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const secret = new TextEncoder().encode('rahulSecret')
+
+    const jwt = await new jose.SignJWT({ username, password })
+      .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('2h')
       .sign(secret)
-
-    jwt.then((result) => {
-      setCookie("token", result, { path: '/' })
-      setToken(result)
-    })
-
-    axios
-      .post("http://localhost:5000/login", {
-        username: username,
-        password: password,
-      }, {
-        headers: {
-          myheader: tooken
-        },
+      .then((result) => {
+        setCookie('token', result, { path: '/' })
+        setToken(result)
       })
+    console.log(jwt)
+    const data = {
+      username: username,
+      password: password,
+    }
+    axios
+      .post('http://localhost:5000/login', data)
       .then((response) => {
-        console.log(response);
-        window.location = "/dashboard";
+        console.log(response)
+        window.location = '/dashboard'
       })
       .catch((error) => {
-        console.log(error);
-      });
-  };
-
+        console.log(error)
+      })
+  }
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -118,7 +113,7 @@ const Login = () => {
                   </CForm>
                 </CCardBody>
               </CCard>
-              <CCard className="text-white bg-primary py-5" style={{ width: "44%" }}>
+              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
                     <h2>Sign up</h2>

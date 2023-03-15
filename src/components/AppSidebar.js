@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -15,11 +16,10 @@ import 'simplebar/dist/simplebar.min.css'
 // sidebar nav config
 import navigation from '../_nav'
 
-const AppSidebar = () => {
+const AppSidebar = (data) => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
-
   return (
     <CSidebar
       position="fixed"
@@ -35,7 +35,7 @@ const AppSidebar = () => {
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={navigation} />
+          <AppSidebarNav items={navigation} data={data}/>
         </SimpleBar>
       </CSidebarNav>
       <CSidebarToggler

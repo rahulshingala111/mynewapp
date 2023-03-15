@@ -1,10 +1,12 @@
+/* eslint-disable */
 import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { CBadge } from '@coreui/react'
 
-export const AppSidebarNav = ({ items }) => {
+export const AppSidebarNav = ({ items, data }) => {
+  console.log(data);
   const location = useLocation()
   const navLink = (name, icon, badge) => {
     return (
