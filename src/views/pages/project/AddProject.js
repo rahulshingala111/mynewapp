@@ -15,19 +15,47 @@ import {
   CFormTextarea,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilEducation, cilUser, cilAddressBook, cilImagePlus, cilAlignLeft } from '@coreui/icons'
+import { cilWindowMaximize, cilUser, cilAddressBook, cilImagePlus, cilAlignLeft } from '@coreui/icons'
 import { AppSidebar, AppFooter, AppHeader } from '../../../components/index'
-import { ReactDatePicker } from 'react-datepicker'
+import axios from 'axios'
 
 const AddProject = () => {
-  const [startDate, setStartDate] = useState(new Date())
+  const [name, setName] = useState()
+  const [date, setDate] = useState(new Date())
+  const [state, setState] = useState()
+  const [description, setDescription] = useState()
 
-  const handleName = () => {}
-  const handleDescription = () => {}
-  const handleDate = () => {}
-  const handleState = () => {}
+  const handleName = (e) => {
+    setName(e.target.value)
+  }
+  const handleDescription = (e) => {
+    setDescription(e.target.value)
+  }
+  const handleDate = (e) => {
+    setDate(e.target.value)
+  }
+  const handleState = (e) => {
+    setState(e.target.value)
+  }
 
-  const handleSubmit = () => {}
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const data = {
+      name: name,
+      date: date,
+      state: state,
+      description: description,
+    }
+    axios
+      .post('http://localhost:5000/dashboard/project/addproject/add', data)
+      .then((result) => {
+        console.log(result)
+        window.location = '/dashboard/project/viewproject'
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
   return (
     <>
       <div>
@@ -42,8 +70,8 @@ const AddProject = () => {
                     <CCard className="mx-4">
                       <CCardBody className="p-4">
                         <CForm onSubmit={handleSubmit}>
-                          <h1>Employee</h1>
-                          <p className="text-medium-emphasis">Add new Employee</p>
+                          <h1>Project</h1>
+                          <p className="text-medium-emphasis">Add new Project</p>
 
                           <CInputGroup className="mb-3">
                             <CInputGroupText>
@@ -56,7 +84,7 @@ const AddProject = () => {
                             <CInputGroupText>
                               <CIcon icon={cilUser} />
                             </CInputGroupText>
-                            <ReactDatePicker />
+                            <CFormInput type="date" onChange={handleDate} />
                           </CInputGroup>
 
                           <CInputGroup className="mb-3">

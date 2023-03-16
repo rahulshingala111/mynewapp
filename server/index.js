@@ -8,6 +8,7 @@ const jose = require('jose')
 //Schema
 const User = require('./Schema/User')
 const Empl = require('./Schema/Employee')
+const Proj = require('./Schema/Project')
 
 //-------- image upload
 const multer = require('multer')
@@ -149,7 +150,7 @@ const isAuthenticated = async (req, res, next) => {
       User.findOne({ username: payload.username })
         .then((result) => {
           res.send(result.role)
-          next();
+          next()
         })
         .catch((error) => {
           console.log(error)
@@ -165,8 +166,7 @@ const isAuthenticated = async (req, res, next) => {
   }
 }
 
-app.get('/dashboard', isAuthenticated, (req, res) => {
-})
+app.get('/dashboard', isAuthenticated, (req, res) => {})
 
 //#endregion
 
@@ -242,6 +242,40 @@ app.post('/dashboard/employee/addemployee/edituser', (req, res) => {
 
 //#endregion
 
+//#region ============================= Project =================================
+app.post('/dashboard/project/addproject/add', (req, res) => {
+  Proj.findOne({ name: req.body.name }).then((result) => {
+    if (result === null) {
+      try {
+        Proj.insertMany({
+          name: req.body.name,
+          date: req.body.date,
+          state: req.body.state,
+          description: req.body.description,
+        })
+        res.sendStatus(200)
+      } catch (err) {
+        console.log(err)
+        res.sendStatus(401)
+      }
+    } else {
+      res.sendStatus(401)
+      console.log('Project already exist')
+    }
+  })
+})
+
+app.get('/dashboard/project/addproject/view', (req, res) => {
+  Proj.find({}).then((result) => {
+    if (result === null) {
+      res.sendStatus(401)
+      console.log('no data found')
+    } else {
+      res.send(result)
+    }
+  })
+})
+//#endregion
 const port = 5000
 app.listen(port, () => {
   console.log(`Listening to Port ${port}`)
