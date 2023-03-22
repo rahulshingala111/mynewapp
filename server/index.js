@@ -9,6 +9,7 @@ const jose = require('jose')
 const User = require('./Schema/User')
 const Empl = require('./Schema/Employee')
 const Proj = require('./Schema/Project')
+const Work = require('./Schema/Work')
 
 //-------- image upload
 const multer = require('multer')
@@ -276,6 +277,46 @@ app.get('/dashboard/project/addproject/view', (req, res) => {
   })
 })
 //#endregion
+
+//#region ============================= Work ====================================
+app.get('/dashboard/employee/work/addwork/viewdata', (req, res) => {
+  try {
+    Proj.find({}).then((result) => {
+      res.send(result)
+    })
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(401)
+  }
+})
+
+app.post('/dashboard/employee/work/addwork/adddata', async (req, res) => {
+  try {
+    await Work.insertMany({
+      project: req.body.project,
+      date: req.body.date,
+      description: req.body.description,
+      hour: req.body.hour,
+    })
+    res.sendStatus(200)
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(401)
+  }
+})
+//#endregion
+
+app.get('/dashboard/employee/work/viewwork', async (req, res) => {
+  try {
+    await Work.find({}).then((result) => {
+      res.send(result)
+    })
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(401)
+  }
+})
+
 const port = 5000
 app.listen(port, () => {
   console.log(`Listening to Port ${port}`)

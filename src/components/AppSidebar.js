@@ -17,7 +17,10 @@ import 'simplebar/dist/simplebar.min.css'
 import navigation from '../_nav'
 import navigationAdmin from '../_navAdmin'
 
-const AppSidebar = (data) => {
+import * as jose from 'jose'
+import Cookies from 'js-cookie'
+
+const AppSidebar =  (data) => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
@@ -29,7 +32,14 @@ const AppSidebar = (data) => {
   // } else {
   //   console.log('nooo')
   // }
-
+  // try {
+  //   const secret = new TextEncoder().encode('rahulSecret')
+  //   const jwt = Cookies.get('token')
+  //   const { payload } = await jose.jwtVerify(jwt, secret)
+  //   console.log(payload.username)
+  // } catch (error) {
+  //   console.log(error)
+  // }
   return (
     <CSidebar
       position="fixed"
@@ -45,7 +55,7 @@ const AppSidebar = (data) => {
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
-          {data.data === 'admin' ? (
+          {data.data === 'admin' && data.data !== undefined ? (
             <AppSidebarNav items={navigationAdmin} />
           ) : (
             <AppSidebarNav items={navigation} />

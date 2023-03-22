@@ -22,7 +22,6 @@ const Dashboard = () => {
       .get('http://localhost:5000/dashboard', auth)
       .then((response) => {
         setData(response.data)
-        console.log(response)
       })
       .catch((error) => {
         console.log(error)
