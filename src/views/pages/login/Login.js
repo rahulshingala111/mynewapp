@@ -13,6 +13,10 @@ import {
   CInputGroup,
   CInputGroupText,
   CRow,
+  CToast,
+  CToastHeader,
+  CToastBody,
+  CToastClose,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
@@ -26,6 +30,7 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [cookies, setCookie] = useCookies(['user'])
   const [tooken, setToken] = useState()
+  const [errMessage, setErrMessage] = useState('')
 
   const handleUserName = (e) => {
     console.log(e.target.value)
@@ -57,11 +62,25 @@ const Login = () => {
       .post('http://localhost:5000/login', data)
       .then((response) => {
         console.log(response)
-        window.location = '/dashboard'
+        // window.location = '/dashboard'
       })
       .catch((error) => {
-        console.log(error)
+        if (error.response?.status === 401) {
+          setErrMessage('unauth')
+        }
+        else(
+          setErrMessage(null)
+        )
       })
+  }
+
+  const toastHeader = () => {
+    ;<CToast autohide={false} visible={true} className="align-items-center">
+      <div className="d-flex">
+        <CToastBody>Hello, world! This is a toast message.</CToastBody>
+        <CToastClose className="me-2 m-auto" />
+      </div>
+    </CToast>
   }
 
   return (

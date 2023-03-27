@@ -70,7 +70,7 @@ const Work = () => {
       .post('http://localhost:5000/dashboard/employee/work/addwork/adddata', post)
       .then((result) => {
         console.log(result)
-        window.location = '/dashboard/employee/work/workhistory'
+        window.location = '/dashboard/employee/work/workhistory '
       })
       .catch((error) => {
         console.log(error)

@@ -23,6 +23,7 @@ import {
 } from '@coreui/react'
 import { AppSidebar, AppFooter, AppHeader } from '../../../components/index'
 import axios from 'axios'
+import { CSVLink, CSVDownload } from 'react-csv'
 
 const WorkHistory = () => {
   const [data, setData] = useState([])
@@ -81,6 +82,17 @@ const WorkHistory = () => {
                               </CTableRow>
                             </>
                           ))}
+                          <CTableRow>
+                            <CTableHeaderCell>
+                              <CSVLink
+                                data={data}
+                                filename="work_history"
+                                className="btn btn-primary"
+                              >
+                                Export To CSV
+                              </CSVLink>
+                            </CTableHeaderCell>
+                          </CTableRow>
                         </CTableBody>
                       </CTable>
                     </CCardBody>
