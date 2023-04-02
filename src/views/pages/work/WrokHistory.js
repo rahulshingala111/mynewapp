@@ -25,7 +25,7 @@ import { AppSidebar, AppFooter, AppHeader } from '../../../components/index'
 import axios from 'axios'
 import { CSVLink, CSVDownload } from 'react-csv'
 import jsPDF from 'jspdf'
-import 'jspdf-autotable'
+import { autoTable } from 'jspdf-autotable'
 const WorkHistory = () => {
   const [data, setData] = useState([])
 
@@ -45,14 +45,16 @@ const WorkHistory = () => {
   }
 
   const handlePDF = () => {
-    var doc_pdf = new jsPDF()
-    autoTable(doc_pdf, {
-      head: [['Name', 'Email', 'Country']],
-      body: [
-        ['David', 'david@example.com', 'Sweden'],
-        ['Castille', 'castille@example.com', 'Spain'],
-        // ...
-      ],
+    var doc_pdf = new jsPDF('portrait', 'px', 'a4')
+
+    let bodydata = []
+    data.forEach((element, index, array) => {
+      bodydata.push([index + 1, element.project, element.hour, element.date, element.description])
+    })
+
+    doc_pdf.autoTable({
+      head: [['#', 'Projects', 'Hours', 'Date', 'Description']],
+      body: bodydata,
     })
 
     doc_pdf.save('test.pdf')
