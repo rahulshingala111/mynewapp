@@ -62,15 +62,12 @@ const Login = () => {
       .post('http://localhost:5000/login', data)
       .then((response) => {
         console.log(response)
-        // window.location = '/dashboard'
+        window.location = '/dashboard'
       })
       .catch((error) => {
         if (error.response?.status === 401) {
           setErrMessage('unauth')
-        }
-        else(
-          setErrMessage(null)
-        )
+        } else setErrMessage(null)
       })
   }
 
