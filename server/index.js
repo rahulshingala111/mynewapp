@@ -304,7 +304,6 @@ app.post('/dashboard/employee/work/addwork/adddata', async (req, res) => {
     res.sendStatus(401)
   }
 })
-//#endregion
 
 app.get('/dashboard/employee/work/viewwork', async (req, res) => {
   try {
@@ -316,6 +315,7 @@ app.get('/dashboard/employee/work/viewwork', async (req, res) => {
     res.sendStatus(401)
   }
 })
+//#endregion
 
 const port = 5000
 app.listen(port, () => {

@@ -28,6 +28,7 @@ import jsPDF from 'jspdf'
 import { autoTable } from 'jspdf-autotable'
 const WorkHistory = () => {
   const [data, setData] = useState([])
+  const [filterData, setFilterData] = useState([])
 
   useEffect(() => {
     getData()
@@ -38,6 +39,7 @@ const WorkHistory = () => {
       .get('http://localhost:5000/dashboard/employee/work/viewwork')
       .then((response) => {
         setData(response.data)
+        setFilterData(response.data)
       })
       .catch((error) => {
         console.log(error)
@@ -60,6 +62,10 @@ const WorkHistory = () => {
     doc_pdf.save('test.pdf')
   }
 
+  var today = new Date()
+  const date = today.getFullYear() + '-0' + (today.getMonth() + 1) + '-0' + today.getDate()
+  console.log(date)
+
   return (
     <>
       <div>
@@ -67,60 +73,55 @@ const WorkHistory = () => {
         <div className="wrapper d-flex flex-column min-vh-100 bg-light">
           <AppHeader />
           <div className="body flex-grow-1 px-3">
-            <CForm>
-              <CRow>
-                <CCol xs={12}>
-                  <CCard className="mb-4">
-                    <CCardHeader>
-                      <div className="row">
-                        <div className="col h3">Project</div>
+            <CForm className="row gy-3 gx-3 align-items-center">
+              <CCard className="mb-4">
+                <CCardHeader>
+                  <CRow>
+                    <CCol sm={5}>
+                      <div>
+                        <h2>Project</h2>
                       </div>
-                    </CCardHeader>
-                    <CCardBody>
-                      <CTable striped hover>
-                        <CTableHead>
-                          <CTableRow>
-                            <CTableHeaderCell scope="col">#</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Project</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Hours</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Date</CTableHeaderCell>
+                    </CCol>
+                    <CCol sm={2}>
+                      <CFormInput type="date" value={date} />
+                    </CCol>
+                    <CCol sm={2}>
+                      <CFormInput type="date" value={date} />
+                    </CCol>
+                    <CCol>
+                      <CSVLink data={data} filename="work_history" className="btn btn-primary">
+                        Export To CSV
+                      </CSVLink>{' '}
+                      <CButton onClick={handlePDF}>Export to PDF</CButton>
+                    </CCol>
+                  </CRow>
+                </CCardHeader>
+
+                <CCardBody>
+                  <CTable striped hover>
+                    <CTableHead>
+                      <CTableRow>
+                        <CTableHeaderCell scope="col">#</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Project</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Hours</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Date</CTableHeaderCell>
+                      </CTableRow>
+                    </CTableHead>
+                    <CTableBody>
+                      {data?.map((user, index) => (
+                        <>
+                          <CTableRow key={index}>
+                            <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
+                            <CTableDataCell>{user.project}</CTableDataCell>
+                            <CTableDataCell>{user.hour}</CTableDataCell>
+                            <CTableDataCell>{user.date}</CTableDataCell>
                           </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                          {data?.map((user, index) => (
-                            <>
-                              <CTableRow key={index}>
-                                <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
-                                <CTableDataCell>{user.project}</CTableDataCell>
-                                <CTableDataCell>{user.hour}</CTableDataCell>
-                                <CTableDataCell>{user.date}</CTableDataCell>
-                                <CTableDataCell>{user.description}</CTableDataCell>
-                              </CTableRow>
-                            </>
-                          ))}
-                          <CTableRow>
-                            <CTableHeaderCell>
-                              <CSVLink
-                                data={data}
-                                filename="work_history"
-                                className="btn btn-primary"
-                              >
-                                Export To CSV
-                              </CSVLink>
-                            </CTableHeaderCell>
-                          </CTableRow>
-                          <CTableRow>
-                            <CTableHeaderCell>
-                              <CButton onClick={handlePDF}>Export to PDF</CButton>
-                            </CTableHeaderCell>
-                          </CTableRow>
-                        </CTableBody>
-                      </CTable>
-                    </CCardBody>
-                  </CCard>
-                </CCol>
-              </CRow>
+                        </>
+                      ))}
+                    </CTableBody>
+                  </CTable>
+                </CCardBody>
+              </CCard>
             </CForm>
           </div>
           <AppFooter />
