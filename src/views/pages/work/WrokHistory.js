@@ -27,8 +27,13 @@ import { CSVLink, CSVDownload } from 'react-csv'
 import jsPDF from 'jspdf'
 import { autoTable } from 'jspdf-autotable'
 const WorkHistory = () => {
+  var today = new Date()
+  const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
+
   const [data, setData] = useState([])
   const [filterData, setFilterData] = useState([])
+  const [startingDate, setStartingDate] = useState('2001-06-03')
+  const [endingDate, setEndingDate] = useState(date)
 
   useEffect(() => {
     getData()
@@ -46,6 +51,20 @@ const WorkHistory = () => {
       })
   }
 
+  const handleStartingDate = (e) => {
+    e.preventDefault()
+    setStartingDate(e.target.value)
+  }
+
+  const handleEndingDate = (e) => {
+    e.preventDefault()
+    setEndingDate(e.target.value)
+  }
+
+  const handleResetFilter = () => {
+    setStartingDate('2001-06-03')
+    setEndingDate(date)
+  }
   const handlePDF = () => {
     var doc_pdf = new jsPDF('portrait', 'px', 'a4')
 
@@ -62,9 +81,19 @@ const WorkHistory = () => {
     doc_pdf.save('test.pdf')
   }
 
-  var today = new Date()
-  const date = today.getFullYear() + '-0' + (today.getMonth() + 1) + '-0' + today.getDate()
-  console.log(date)
+  let datefilter = []
+
+  for (let i = 0; i < filterData.length; i++) {
+    if (filterData[i].date >= startingDate && filterData[i].date <= endingDate) {
+      datefilter.push(filterData[i])
+    }
+  }
+
+  for (let j = 0; j < data.length; j++) {
+    console.log(data[j].project)
+  }
+
+
 
   return (
     <>
@@ -77,22 +106,26 @@ const WorkHistory = () => {
               <CCard className="mb-4">
                 <CCardHeader>
                   <CRow>
-                    <CCol sm={5}>
+                    <CCol sm={4}>
                       <div>
                         <h2>Project</h2>
                       </div>
                     </CCol>
                     <CCol sm={2}>
-                      <CFormInput type="date" value={date} />
+                      <CFormInput type="date" onChange={handleStartingDate} />
                     </CCol>
                     <CCol sm={2}>
-                      <CFormInput type="date" value={date} />
+                      <CFormInput type="date" onChange={handleEndingDate} />
+                    </CCol>
+                    <CCol sm={1}>
+                      <CButton onClick={handleResetFilter}>Reset</CButton>
                     </CCol>
                     <CCol>
+                      Export To {'  '}
                       <CSVLink data={data} filename="work_history" className="btn btn-primary">
-                        Export To CSV
+                        CSV
                       </CSVLink>{' '}
-                      <CButton onClick={handlePDF}>Export to PDF</CButton>
+                      <CButton onClick={handlePDF}>PDF</CButton>
                     </CCol>
                   </CRow>
                 </CCardHeader>
@@ -108,7 +141,7 @@ const WorkHistory = () => {
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                      {data?.map((user, index) => (
+                      {datefilter?.map((user, index) => (
                         <>
                           <CTableRow key={index}>
                             <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
