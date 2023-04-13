@@ -82,18 +82,25 @@ const WorkHistory = () => {
   }
 
   let datefilter = []
-
-  for (let i = 0; i < filterData.length; i++) {
-    if (filterData[i].date >= startingDate && filterData[i].date <= endingDate) {
-      datefilter.push(filterData[i])
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].date >= startingDate && data[i].date <= endingDate) {
+      datefilter.push(data[i])
     }
   }
+  console.log(datefilter)
 
-  for (let j = 0; j < data.length; j++) {
-    console.log(data[j].project)
-  }
+  var arr = datefilter
+  var output = arr.reduce(function (accumulator, cur) {
+    var project = cur.project,
+      found = accumulator.find(function (elem) {
+        return elem.project == project
+      })
+    if (found) found.hour += cur.hour
+    else accumulator.push(cur)
+    return accumulator
+  }, [])
 
-
+  console.log(output)
 
   return (
     <>
@@ -141,7 +148,7 @@ const WorkHistory = () => {
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                      {datefilter?.map((user, index) => (
+                      {filterData?.map((user, index) => (
                         <>
                           <CTableRow key={index}>
                             <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
