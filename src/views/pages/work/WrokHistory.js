@@ -52,12 +52,10 @@ const WorkHistory = () => {
   }
 
   const handleStartingDate = (e) => {
-    e.preventDefault()
     setStartingDate(e.target.value)
   }
 
   const handleEndingDate = (e) => {
-    e.preventDefault()
     setEndingDate(e.target.value)
   }
 
@@ -65,6 +63,7 @@ const WorkHistory = () => {
     setStartingDate('2001-06-03')
     setEndingDate(date)
   }
+
   const handlePDF = () => {
     var doc_pdf = new jsPDF('portrait', 'px', 'a4')
 
@@ -87,7 +86,6 @@ const WorkHistory = () => {
       datefilter.push(data[i])
     }
   }
-  console.log(datefilter)
 
   var arr = datefilter
   var output = arr.reduce(function (accumulator, cur) {
@@ -95,14 +93,14 @@ const WorkHistory = () => {
       found = accumulator.find(function (elem) {
         return elem.project == project
       })
-    if (found) found.hour += cur.hour
-    else accumulator.push(cur)
+    if (found) {
+      found.hour += cur.hour
+    } else {
+      accumulator.push(cur)
+    }
     return accumulator
   }, [])
-
-  console.log(output)
-
-  return (
+   return (
     <>
       <div>
         <AppSidebar />
@@ -148,7 +146,7 @@ const WorkHistory = () => {
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                      {filterData?.map((user, index) => (
+                      {output?.map((user, index) => (
                         <>
                           <CTableRow key={index}>
                             <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
