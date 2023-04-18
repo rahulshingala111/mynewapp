@@ -40,6 +40,7 @@ const AppSidebar =  (data) => {
   // } catch (error) {
   //   console.log(error)
   // }
+  var dataa = data.data;
   return (
     <CSidebar
       position="fixed"
@@ -55,7 +56,7 @@ const AppSidebar =  (data) => {
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
-          {data.data === 'admin' && data.data !== undefined ? (
+          {dataa === 'admin' ? (
             <AppSidebarNav items={navigationAdmin} />
           ) : (
             <AppSidebarNav items={navigation} />

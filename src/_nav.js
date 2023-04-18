@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react'
 import CIcon from '@coreui/icons-react'
-import { cilWindowMaximize, cilDrop, cilBook, cilPlus } from '@coreui/icons'
+import { cilWindowMaximize, cilDrop, cilBook, cilPlus, cilUser } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 const _nav = [
   // {
@@ -61,7 +61,7 @@ const _nav = [
     component: CNavItem,
     name: 'Employee Work History',
     to: '/dashboard/employee/work/employeeworkhistory',
-    icon: <CIcon icon={cilBook} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
 ]
 

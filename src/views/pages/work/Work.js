@@ -17,6 +17,8 @@ import {
   CFormCheck,
 } from '@coreui/react'
 import axios from 'axios'
+import Cookies from 'js-cookie'
+import jwt_decode from 'jwt-decode'
 
 const Work = () => {
   const [data, setData] = useState()
@@ -58,12 +60,13 @@ const Work = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
+    const decoded = jwt_decode(Cookies.get('token'))
     const post = {
       project: project,
       date: date,
       description: description,
       hour: hour,
+      createdBy: decoded.username,
     }
 
     axios

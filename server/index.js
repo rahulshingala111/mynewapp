@@ -95,6 +95,7 @@ app.post('/register', checkUsername, checkEmail, (req, res) => {
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
+      role: 'employee',
     })
     res.sendStatus(200)
   } catch (error) {
@@ -297,6 +298,7 @@ app.post('/dashboard/employee/work/addwork/adddata', async (req, res) => {
       date: req.body.date,
       description: req.body.description,
       hour: req.body.hour,
+      createdBy: req.body.createdBy,
     })
     res.sendStatus(200)
   } catch (error) {
@@ -324,6 +326,27 @@ app.post('/dashboard/employee/work/viewwork/filtered', async (req, res) => {
     console.log(error)
     res.sendStatus(401)
   }
+})
+app.get('/dashboard/employee/work/viewemployeework', async (req, res) => {
+  Work.find({})
+    .then((result) => {
+      res.send(result)
+    })
+    .catch((error) => {
+      console.log(error)
+      res.sendStatus(401)
+    })
+})
+
+app.post('/dashboard/employee/work/viewemployeework/viewbyuser', async (req, res) => {
+  Work.find({ createdBy: req.body.employee })
+    .then((result) => {
+      res.send(result)
+    })
+    .catch((error) => {
+      console.log(error)
+      res.sendStatus(401)
+    })
 })
 //#endregion
 

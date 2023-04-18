@@ -5,6 +5,7 @@ const UserSchema = mongoose.Schema({
   date: String,
   description: String,
   hour: Number,
+  createdBy: String,
 })
 
 module.exports = mongoose.model('work', UserSchema)

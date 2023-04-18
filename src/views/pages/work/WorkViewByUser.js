@@ -23,11 +23,13 @@ import {
 } from '@coreui/react'
 import { AppSidebar, AppFooter, AppHeader } from '../../../components/index'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 const EmployeeWorkHistory = () => {
   const [data, setData] = useState([])
-  const navigate = useNavigate()
+
+  let location = useLocation()
+  const employee = location.state.createdBy
 
   useEffect(() => {
     getData()
@@ -35,26 +37,17 @@ const EmployeeWorkHistory = () => {
 
   const getData = async () => {
     await axios
-      .get('http://localhost:5000/dashboard/employee/work/viewemployeework')
+      .post('http://localhost:5000/dashboard/employee/work/viewemployeework/viewbyuser', {
+        employee: location.state.createdBy,
+      })
       .then((response) => {
         setData(response.data)
+        console.log(response.data)
       })
       .catch((error) => {
         console.log(error)
       })
   }
-  var output = data.reduce(function (accumulator, cur) {
-    var createdBy = cur.createdBy,
-      found = accumulator.find(function (elem) {
-        return elem.createdBy == createdBy
-      })
-    if (found) {
-      found.hour += cur.hour
-    } else {
-      accumulator.push(cur)
-    }
-    return accumulator
-  }, [])
   return (
     <>
       <div>
@@ -68,23 +61,11 @@ const EmployeeWorkHistory = () => {
                   <CRow className="text-end">
                     <CCol className="text-start">
                       <div>
-                        <h2>Employee</h2>
+                        <h2>{employee}</h2>
                       </div>
                     </CCol>
                   </CRow>
-                  <CRow className="text-end">
-                    {/* <CCol>
-                      Export To {'  '}
-                      <CSVLink
-                        data={filterData}
-                        filename="work_history"
-                        className="btn btn-primary"
-                      >
-                        CSV
-                      </CSVLink>{' '}
-                       <CButton onClick={handlePDF}>PDF</CButton> 
-                    </CCol> */}
-                  </CRow>
+                  <CRow className="text-end"></CRow>
                 </CCardHeader>
 
                 <CCardBody>
@@ -92,29 +73,16 @@ const EmployeeWorkHistory = () => {
                     <CTableHead>
                       <CTableRow>
                         <CTableHeaderCell scope="col">#</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Project</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Hours</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                      {output?.map((user, index) => (
+                      {data?.map((user, index) => (
                         <>
                           <CTableRow key={index}>
                             <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
-                            <CTableDataCell>
-                              <Link></Link>
-                              <a
-                                onClick={() => {
-                                  navigate('/dashboard/employee/work/viewemployeework/viewbyuser', {
-                                    state: {
-                                      createdBy: user.createdBy,
-                                    },
-                                  })
-                                }}
-                              >
-                                {user.createdBy}
-                              </a>
-                            </CTableDataCell>
+                            <CTableDataCell>{user.project}</CTableDataCell>
                             <CTableDataCell>{user.hour}</CTableDataCell>
                           </CTableRow>
                         </>
