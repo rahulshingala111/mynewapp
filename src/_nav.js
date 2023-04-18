@@ -57,6 +57,12 @@ const _nav = [
     to: '/dashboard/employee/work/workhistory',
     icon: <CIcon icon={cilBook} customClassName="nav-icon" />,
   },
+  {
+    component: CNavItem,
+    name: 'Employee Work History',
+    to: '/dashboard/employee/work/employeeworkhistory',
+    icon: <CIcon icon={cilBook} customClassName="nav-icon" />,
+  },
 ]
 
 export default _nav
