@@ -44,7 +44,6 @@ const WorkHistory = () => {
       .get('http://localhost:5000/dashboard/employee/work/viewwork')
       .then((response) => {
         setData(response.data)
-        setFilterData(response.data)
       })
       .catch((error) => {
         console.log(error)
@@ -71,29 +70,35 @@ const WorkHistory = () => {
   }
 
   const handleApply = () => {
-    setStartingDate(document.getElementById('abc').value)
-    setEndingDate(document.getElementById('bcd').value)
-  }
-  var datefilter = []
-  for (let i = 0; i < data.length; i++) {
-    if (data[i].date >= startingDate && data[i].date <= endingDate) {
-      datefilter.push(data[i])
-    }
-  }
-  var output = datefilter.reduce(function (accumulator, cur) {
-    var project = cur.project,
-      found = accumulator.find(function (elem) {
-        return elem.project == project
+    // setStartingDate(document.getElementById('abc').value)
+    // setEndingDate(document.getElementById('bcd').value)
+    axios
+      .get('http://localhost:5000/dashboard/employee/work/viewwork/filtered')
+      .then((response) => {
+        setFilterData(response)
       })
-    if (found) {
-      found.hour += cur.hour
-    } else {
-      accumulator.push(cur)
-    }
-    return accumulator
-  }, [])
-
-  console.log('this is for bracnch ;aojjnae;rongaojn');
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+  // var datefilter = []
+  // for (let i = 0; i < data.length; i++) {
+  //   if (data[i].date >= startingDate && data[i].date <= endingDate) {
+  //     datefilter.push(data[i])
+  //   }
+  // }
+  // var output = datefilter.reduce(function (accumulator, cur) {
+  //   var project = cur.project,
+  //     found = accumulator.find(function (elem) {
+  //       return elem.project == project
+  //     })
+  //   if (found) {
+  //     found.hour += cur.hour
+  //   } else {
+  //     accumulator.push(cur)
+  //   }
+  //   return accumulator
+  // }, [])
 
   return (
     <>

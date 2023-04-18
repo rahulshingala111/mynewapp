@@ -315,6 +315,16 @@ app.get('/dashboard/employee/work/viewwork', async (req, res) => {
     res.sendStatus(401)
   }
 })
+app.get('/dashboard/employee/work/viewwork/filtered', async (req, res) => {
+  try {
+    await Work.find({}).then((result) => {
+      res.send(result)
+    })
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(401)
+  }
+})
 //#endregion
 
 const port = 5000
