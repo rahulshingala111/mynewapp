@@ -303,7 +303,7 @@ app.post('/dashboard/employee/work/addwork/adddata', async (req, res) => {
     console.log(error)
     res.sendStatus(401)
   }
-})  
+})
 
 app.get('/dashboard/employee/work/viewwork', async (req, res) => {
   try {
@@ -315,9 +315,9 @@ app.get('/dashboard/employee/work/viewwork', async (req, res) => {
     res.sendStatus(401)
   }
 })
-app.get('/dashboard/employee/work/viewwork/filtered', async (req, res) => {
+app.post('/dashboard/employee/work/viewwork/filtered', async (req, res) => {
   try {
-    await Work.find({}).then((result) => {
+    await Work.find({ date: { $gte: req.body.sdate, $lte: req.body.edate } }).then((result) => {
       res.send(result)
     })
   } catch (error) {

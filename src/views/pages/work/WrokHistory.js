@@ -68,37 +68,32 @@ const WorkHistory = () => {
 
     doc_pdf.save('test.pdf')
   }
-
   const handleApply = () => {
-    // setStartingDate(document.getElementById('abc').value)
-    // setEndingDate(document.getElementById('bcd').value)
     axios
-      .get('http://localhost:5000/dashboard/employee/work/viewwork/filtered')
+      .post('http://localhost:5000/dashboard/employee/work/viewwork/filtered', {
+        sdate: document.getElementById('abc').value,
+        edate: document.getElementById('bcd').value,
+      })
       .then((response) => {
-        setFilterData(response)
+        setFilterData(response.data)
+        console.log('post data : ' + response.data)
       })
       .catch((error) => {
         console.log(error)
       })
   }
-  // var datefilter = []
-  // for (let i = 0; i < data.length; i++) {
-  //   if (data[i].date >= startingDate && data[i].date <= endingDate) {
-  //     datefilter.push(data[i])
-  //   }
-  // }
-  // var output = datefilter.reduce(function (accumulator, cur) {
-  //   var project = cur.project,
-  //     found = accumulator.find(function (elem) {
-  //       return elem.project == project
-  //     })
-  //   if (found) {
-  //     found.hour += cur.hour
-  //   } else {
-  //     accumulator.push(cur)
-  //   }
-  //   return accumulator
-  // }, [])
+  var output = filterData.reduce(function (accumulator, cur) {
+    var project = cur.project,
+      found = accumulator.find(function (elem) {
+        return elem.project == project
+      })
+    if (found) {
+      found.hour += cur.hour
+    } else {
+      accumulator.push(cur)
+    }
+    return accumulator
+  }, [])
 
   return (
     <>
@@ -143,7 +138,6 @@ const WorkHistory = () => {
                         <CTableHeaderCell scope="col">#</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Project</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Hours</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Date</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
@@ -153,7 +147,6 @@ const WorkHistory = () => {
                             <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
                             <CTableDataCell>{user.project}</CTableDataCell>
                             <CTableDataCell>{user.hour}</CTableDataCell>
-                            <CTableDataCell>{user.date}</CTableDataCell>
                           </CTableRow>
                         </>
                       ))}
