@@ -76,7 +76,6 @@ const WorkHistory = () => {
       })
       .then((response) => {
         setFilterData(response.data)
-        console.log('post data : ' + response.data)
       })
       .catch((error) => {
         console.log(error)
