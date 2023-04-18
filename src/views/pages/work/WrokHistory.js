@@ -26,38 +26,30 @@ import axios from 'axios'
 import { CSVLink, CSVDownload } from 'react-csv'
 import jsPDF from 'jspdf'
 import { autoTable } from 'jspdf-autotable'
+import { async } from 'regenerator-runtime'
 const WorkHistory = () => {
-  var today = new Date()
-  const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
-
-  const [data, setData] = useState([])
+  const [refreshData, setRefreshData] = useState(1)
   const [filterData, setFilterData] = useState([])
-  const [startingDate, setStartingDate] = useState('2001-06-03')
-  const [endingDate, setEndingDate] = useState(date)
 
   useEffect(() => {
     getData()
-  }, [])
+  }, [refreshData])
 
   const getData = async () => {
     await axios
       .get('http://localhost:5000/dashboard/employee/work/viewwork')
       .then((response) => {
-        setData(response.data)
+        setFilterData(response.data)
       })
       .catch((error) => {
         console.log(error)
       })
   }
-  const handleResetFilter = () => {
-    setStartingDate('2001-06-03')
-    setEndingDate(date)
-  }
   const handlePDF = () => {
     var doc_pdf = new jsPDF('portrait', 'px', 'a4')
 
     let bodydata = []
-    data.forEach((element, index, array) => {
+    filterData.forEach((element, index, array) => {
       bodydata.push([index + 1, element.project, element.hour, element.date, element.description])
     })
 
@@ -68,8 +60,8 @@ const WorkHistory = () => {
 
     doc_pdf.save('test.pdf')
   }
-  const handleApply = () => {
-    axios
+  const handleApply = async () => {
+    await axios
       .post('http://localhost:5000/dashboard/employee/work/viewwork/filtered', {
         sdate: document.getElementById('abc').value,
         edate: document.getElementById('bcd').value,
@@ -80,6 +72,9 @@ const WorkHistory = () => {
       .catch((error) => {
         console.log(error)
       })
+  }
+  const handleResetFilter = () => {
+    setRefreshData(Math.random())
   }
   var output = filterData.reduce(function (accumulator, cur) {
     var project = cur.project,
@@ -122,7 +117,11 @@ const WorkHistory = () => {
                     </CCol>
                     <CCol>
                       Export To {'  '}
-                      <CSVLink data={data} filename="work_history" className="btn btn-primary">
+                      <CSVLink
+                        data={filterData}
+                        filename="work_history"
+                        className="btn btn-primary"
+                      >
                         CSV
                       </CSVLink>{' '}
                       <CButton onClick={handlePDF}>PDF</CButton>
