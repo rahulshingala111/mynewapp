@@ -50,20 +50,10 @@ const WorkHistory = () => {
         console.log(error)
       })
   }
-
-  const handleStartingDate = (e) => {
-    setStartingDate(e.target.value)
-  }
-
-  const handleEndingDate = (e) => {
-    setEndingDate(e.target.value)
-  }
-
   const handleResetFilter = () => {
     setStartingDate('2001-06-03')
     setEndingDate(date)
   }
-
   const handlePDF = () => {
     var doc_pdf = new jsPDF('portrait', 'px', 'a4')
 
@@ -80,15 +70,17 @@ const WorkHistory = () => {
     doc_pdf.save('test.pdf')
   }
 
-  let datefilter = []
+  const handleApply = () => {
+    setStartingDate(document.getElementById('abc').value)
+    setEndingDate(document.getElementById('bcd').value)
+  }
+  var datefilter = []
   for (let i = 0; i < data.length; i++) {
     if (data[i].date >= startingDate && data[i].date <= endingDate) {
       datefilter.push(data[i])
     }
   }
-
-  var arr = datefilter
-  var output = arr.reduce(function (accumulator, cur) {
+  var output = datefilter.reduce(function (accumulator, cur) {
     var project = cur.project,
       found = accumulator.find(function (elem) {
         return elem.project == project
@@ -100,7 +92,9 @@ const WorkHistory = () => {
     }
     return accumulator
   }, [])
-   return (
+
+
+  return (
     <>
       <div>
         <AppSidebar />
@@ -117,12 +111,13 @@ const WorkHistory = () => {
                       </div>
                     </CCol>
                     <CCol sm={2}>
-                      <CFormInput type="date" onChange={handleStartingDate} />
+                      <CFormInput type="date" id="abc" />
                     </CCol>
                     <CCol sm={2}>
-                      <CFormInput type="date" onChange={handleEndingDate} />
+                      <CFormInput type="date" id="bcd" />
                     </CCol>
                     <CCol sm={1}>
+                      <CButton onClick={handleApply}>Apply</CButton>
                       <CButton onClick={handleResetFilter}>Reset</CButton>
                     </CCol>
                     <CCol>
