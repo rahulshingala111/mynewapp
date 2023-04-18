@@ -93,6 +93,7 @@ const WorkHistory = () => {
     return accumulator
   }, [])
 
+  console.log('this is for bracnch ;aojjnae;rongaojn');
 
   return (
     <>
