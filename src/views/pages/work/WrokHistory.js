@@ -99,8 +99,8 @@ const WorkHistory = () => {
             <CForm className="row gy-3 gx-3 align-items-center">
               <CCard className="mb-4">
                 <CCardHeader>
-                  <CRow>
-                    <CCol sm={4}>
+                  <CRow className="text-end">
+                    <CCol className="text-start">
                       <div>
                         <h2>Project</h2>
                       </div>
@@ -111,10 +111,12 @@ const WorkHistory = () => {
                     <CCol sm={2}>
                       <CFormInput type="date" id="bcd" />
                     </CCol>
-                    <CCol sm={1}>
-                      <CButton onClick={handleApply}>Apply</CButton>
+                    <CCol sm={2}>
+                      <CButton onClick={handleApply}>Apply</CButton>{' '}
                       <CButton onClick={handleResetFilter}>Reset</CButton>
                     </CCol>
+                  </CRow>
+                  <CRow className="text-end">
                     <CCol>
                       Export To {'  '}
                       <CSVLink
