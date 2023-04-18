@@ -102,7 +102,6 @@ const EmployeeWorkHistory = () => {
                           <CTableRow key={index}>
                             <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
                             <CTableDataCell>
-                              <Link></Link>
                               <a
                                 onClick={() => {
                                   navigate('/dashboard/employee/work/viewemployeework/viewbyuser', {
