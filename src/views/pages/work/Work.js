@@ -19,6 +19,7 @@ import {
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import jwt_decode from 'jwt-decode'
+import emailjs from 'emailjs-com'
 
 const Work = () => {
   const [data, setData] = useState()
@@ -68,10 +69,28 @@ const Work = () => {
       hour: hour,
       createdBy: decoded.username,
     }
+    const data = {
+      // to_mail: 'rahulshingala111@gmail.com', //comment out for use
+      createdBy: decoded.username,
+      hours: hour,
+      project: project,
+      date: date,
+      description: description,
+    }
 
     axios
       .post('http://localhost:5000/dashboard/employee/work/addwork/adddata', post)
-      .then((result) => {
+      .then(async (result) => {
+        await emailjs
+          .send('service_justforfun', 'template_justforfun', data, '6UGSluLlxd2vg2Aie')
+          .then(
+            (result) => {
+              console.log(result.text)
+            },
+            (error) => {
+              console.log(error.text)
+            },
+          )
         console.log(result)
         window.location = '/dashboard/employee/work/workhistory '
       })
@@ -79,6 +98,21 @@ const Work = () => {
         console.log(error)
       })
   }
+  // const handleemail = (e) => {
+  //   e.preventDefault()
+  //   const data = {
+  //     message: 'sfdsf',
+  //     to_mail: 'rahulshingala111@gmail.com',
+  //   }
+  //   emailjs.send('service_justforfun', 'template_justforfun', data, '6UGSluLlxd2vg2Aie').then(
+  //     (result) => {
+  //       console.log(result.text)
+  //     },
+  //     (error) => {
+  //       console.log(error.text)
+  //     },
+  //   )
+  // }
 
   return (
     <>
