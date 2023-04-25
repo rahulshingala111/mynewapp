@@ -11,6 +11,16 @@ const Empl = require('./Schema/Employee')
 const Proj = require('./Schema/Project')
 const Work = require('./Schema/Work')
 
+const nodemailer = require('nodemailer')
+var transport = nodemailer.createTransport({
+  host: 'sandbox.smtp.mailtrap.io',
+  port: 2525,
+  auth: {
+    user: 'cec108ccd0261f',
+    pass: 'c6be92e8c15885',
+  },
+})
+
 //-------- image upload
 const multer = require('multer')
 const storage = multer.diskStorage({
@@ -337,17 +347,40 @@ app.get('/dashboard/employee/work/viewemployeework', async (req, res) => {
       res.sendStatus(401)
     })
 })
-
+var transport = nodemailer.createTransport({
+  host: 'sandbox.smtp.mailtrap.io',
+  port: 2525,
+  auth: {
+    user: 'cec108ccd0261f',
+    pass: 'c6be92e8c15885',
+  },
+})
 app.post('/dashboard/employee/work/viewemployeework/viewbyuser', async (req, res) => {
   Work.find({ createdBy: req.body.employee })
     .then((result) => {
       res.send(result)
+
+      var mailOptions = {
+        from: 'lion.rahul999@gmail.com',
+        to: 'rahulshingala111@gmail.com',
+        subject: 'Sending Email via Node.js',
+        text: 'That was easy!',
+      }
+
+      transport.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error)
+        } else {
+          console.log('Email sent: ' + info.response)
+        }
+      })
     })
     .catch((error) => {
       console.log(error)
       res.sendStatus(401)
     })
 })
+
 //#endregion
 
 const port = 5000
