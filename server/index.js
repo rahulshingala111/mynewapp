@@ -1,3 +1,4 @@
+/* eslint-disable */
 const express = require('express')
 const mongoose = require('mongoose')
 const cookie = require('cookie')
@@ -5,6 +6,17 @@ const jwt = require('jsonwebtoken')
 const path = require('path')
 const app = express()
 const jose = require('jose')
+const http = require('http')
+const server = http.createServer(app)
+const { Server } = require('socket.io')
+const cors = require('cors')
+app.use(cors())
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
+})
 //Schema
 const User = require('./Schema/User')
 const Empl = require('./Schema/Employee')
@@ -350,6 +362,52 @@ app.post('/dashboard/employee/work/viewemployeework/viewbyuser', async (req, res
 })
 //#endregion
 
+//#region ============================= Chat =====================================
+
+app.get('/dashboard/chat/users', (req, res) => {
+  try {
+    User.find({})
+      .then((response) => {
+        res.send(response)
+      })
+      .catch((error) => {
+        console.log(error)
+        res.sendStatus(404)
+      })
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(200)
+  }
+})
+
+//-----------socket ------------
+
+io.on('connection', (socket) => {
+  console.log('user connected - ' + socket.id)
+
+  socket.on('chat message', (msg) => {
+    console.log('message :' + msg)
+  })
+
+  socket.on('join_room', (room) => {
+    socket.join(room)
+    console.log(`user ${socket.id} joined ${room} room`)
+  })
+
+  socket.on('send_message', (messageData) => {
+    console.log(messageData)
+    socket.to(messageData.username).emit('recieve_message', messageData)
+  })
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected', socket.id)
+  })
+})
+
+server.listen(3001, () => {
+  console.log('listening on ' + 3001)
+})
+//#endregion
 const port = 5000
 app.listen(port, () => {
   console.log(`Listening to Port ${port}`)

@@ -2,7 +2,6 @@
 import React, { Component, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
-
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
@@ -34,6 +33,7 @@ const Register = React.lazy(() => import('./views/pages/register/Register'))
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
+const Chat = React.lazy(()=>import('./views/pages/chat/Chat'))
 
 class App extends Component {
   render() {
@@ -59,6 +59,8 @@ class App extends Component {
             <Route exact path="/dashboard/employee/work/workhistory" name="Work history" element={<WorkHistory />} />
             <Route exact path="/dashboard/employee/work/employeeworkhistory" name="Work history" element={<EmployeeWorkHistory />} />
             <Route exact path="/dashboard/employee/work/viewemployeework/viewbyuser" name="Work history" element={<WorkViewbyUser />} />
+
+            <Route exact path="/dashboard/chat" name="chat" element={<Chat />} />
 
             <Route path="/*" name="Page 404" element={<Page404 />} />
             <Route path="/500" name="Page 500" element={<Page500 />} />
