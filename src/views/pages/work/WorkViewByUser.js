@@ -26,12 +26,11 @@ import axios from 'axios'
 import { useLocation } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import jwt_decode from 'jwt-decode'
-import emailjs from 'emailjs-com'
 import mailchimpTx from '@mailchimp/mailchimp_transactional'
 import jsPDF from 'jspdf'
 import { autoTable } from 'jspdf-autotable'
-// const sendgrid = require('@sendgrid/mail')
-// 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
+const mailchimp = require('@mailchimp/mailchimp_transactional')('md-vSOG0VXINFRZ7wTjYQAlSg')
+
 const EmployeeWorkHistory = () => {
   const [data, setData] = useState([])
 
@@ -56,46 +55,23 @@ const EmployeeWorkHistory = () => {
   }
   const decoded = jwt_decode(Cookies.get('token'))
 
-  const handlePDF = () => {
-    var doc_pdf = new jsPDF('portrait', 'px', 'a4')
+  let bodydata = []
+  data.forEach((element, index, array) => {
+    bodydata.push([index + 1, element.project, element.hour])
+  })
 
-    let bodydata = []
-    data.forEach((element, index, array) => {
-      bodydata.push([index + 1, element.project, element.hour])
-    })
-
-    doc_pdf.autoTable({
-      head: [['#', 'Projects', 'Hours']],
-      body: bodydata,
-    })
-
-    doc_pdf.save('test.pdf')
-  }
-
-  const handlemail = () => {
+  const handlemail = async () => {
     console.log('handleemail')
-
-    // let newproject = []
-    // let newhour = []
-
-    // for (let i = 0; i <= data.length; i++) {
-    //   newproject.push(data[i]?.project)
-    //   newhour.push(data[i]?.hour)
-    // }
-    // const datatosned = {
-    //   to_mail: 'rahulshingala111@gmail.com',
-    //   dataProject: newproject,
-    //   dataHour: newhour,
-    // }
-    //var key = md - Ug1UOvWZNMYq2ORLyYXqeQ
-    // emailjs.send('service_justforfun', 'template_report', datatosned, '6UGSluLlxd2vg2Aie').then(
-    //   (result) => {
-    //     console.log(result.text)
-    //   },
-    //   (error) => {
-    //     console.log(error.text)
-    //   },
-    // )
+    await axios
+      .post('http://localhost:5000/dashboard/mail', {
+        bodydata: bodydata,
+      })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
   return (
     <>

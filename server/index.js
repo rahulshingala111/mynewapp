@@ -12,7 +12,7 @@ const Proj = require('./Schema/Project')
 const Work = require('./Schema/Work')
 
 const nodemailer = require('nodemailer')
-var transport = nodemailer.createTransport({
+var transporter = nodemailer.createTransport({
   host: 'sandbox.smtp.mailtrap.io',
   port: 2525,
   auth: {
@@ -20,6 +20,8 @@ var transport = nodemailer.createTransport({
     pass: 'c6be92e8c15885',
   },
 })
+const { jsPDF } = require('jspdf')
+const autotable = require('jspdf-autotable')
 
 //-------- image upload
 const multer = require('multer')
@@ -347,37 +349,44 @@ app.get('/dashboard/employee/work/viewemployeework', async (req, res) => {
       res.sendStatus(401)
     })
 })
-var transport = nodemailer.createTransport({
-  host: 'sandbox.smtp.mailtrap.io',
-  port: 2525,
-  auth: {
-    user: 'cec108ccd0261f',
-    pass: 'c6be92e8c15885',
-  },
-})
+
 app.post('/dashboard/employee/work/viewemployeework/viewbyuser', async (req, res) => {
   Work.find({ createdBy: req.body.employee })
     .then((result) => {
       res.send(result)
-
-      var mailOptions = {
-        from: 'lion.rahul999@gmail.com',
-        to: 'rahulshingala111@gmail.com',
-        subject: 'Sending Email via Node.js',
-        text: 'That was easy!',
-      }
-
-      transport.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error)
-        } else {
-          console.log('Email sent: ' + info.response)
-        }
-      })
     })
     .catch((error) => {
       console.log(error)
       res.sendStatus(401)
+    })
+})
+app.post('/dashboard/mail', async (req, res) => {
+  var doc_pdf = new jsPDF('portrait', 'px', 'a4')
+  doc_pdf.autoTable({
+    head: [['#', 'Projects', 'Hours']],
+    body: req.body.bodydata,
+  })
+  doc_pdf.save('./pdf/test.pdf')
+  await transporter
+    .sendMail({
+      from: 'lion.rahul999@gmail.com',
+      to: 'rahulshingala111@gmail.com',
+      subject: 'PDF document',
+      text: 'Hello, we send you file attached, please download',
+      attachments: [
+        {
+          filename: 'sample_attachment.pdf',
+          path: './pdf/test.pdf',
+        },
+      ],
+    })
+    .then((response) => {
+      console.log(response)
+      res.sendStatus(200)
+    })
+    .catch((error) => {
+      console.log(error)
+      res.sendStatus(500)
     })
 })
 
